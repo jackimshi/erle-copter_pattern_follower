@@ -59,7 +59,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
 
         // Get the msg image
         cv::Mat InImage;
-        InImage = cv_bridge::toCvShare(msg, "bgr8")->image;
+        InImage = cv_bridge::toCvShare(mavmsg, "bgr8")->image;
 
         // Error between Image and Mark
         float ErX = 0.0;
@@ -73,7 +73,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
         MDetector.detect(InImage,Markers);
 
         // Create RC msg
-        mavros::OverrideRCIn msg;
+        mavros::OverrideRCIn mavmsg;
 
         lastMarkX = MarkX;
         lastMarkY = MarkY;
@@ -129,16 +129,16 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
             Pitch = MINRC;
         }
 
-        msg.channels[0] = Roll;     //Roll
-        msg.channels[1] = Pitch;    //Pitch
-        msg.channels[2] = BASERC;   //Throttle
-        msg.channels[3] = 0;        //Yaw
-        msg.channels[4] = 0;
-        msg.channels[5] = 0;
-        msg.channels[6] = 0;
-        msg.channels[7] = 0;
+        mavmsg.channels[0] = Roll;     //Roll
+        mavmsg.channels[1] = Pitch;    //Pitch
+        mavmsg.channels[2] = BASERC;   //Throttle
+        mavmsg.channels[3] = 0;        //Yaw
+        mavmsg.channels[4] = 0;
+        mavmsg.channels[5] = 0;
+        mavmsg.channels[6] = 0;
+        mavmsg.channels[7] = 0;
 
-        pub.publish(msg);
+        pub.publish(mavmsg);
 
         cv::imshow("view", InImage);
         cv::waitKey(30);
